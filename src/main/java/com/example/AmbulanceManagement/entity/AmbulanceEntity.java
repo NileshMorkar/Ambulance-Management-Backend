@@ -26,6 +26,7 @@ public class AmbulanceEntity {
     private String hospitalName;
     private String hospitalAddress;
 
+    @Column(unique = true)
     private String email;
     private String password;
 }

@@ -2,8 +2,11 @@ package com.example.AmbulanceManagement.controller;
 
 import com.example.AmbulanceManagement.entity.AmbulanceEntity;
 import com.example.AmbulanceManagement.entity.AmbulanceLocationEntity;
+import com.example.AmbulanceManagement.exception.GlobalException;
 import com.example.AmbulanceManagement.models.AmbulanceLocationRequest;
 import com.example.AmbulanceManagement.models.AmbulanceLocationResponse;
+import com.example.AmbulanceManagement.models.request.LoginRequest;
+import com.example.AmbulanceManagement.models.response.LoginResponse;
 import com.example.AmbulanceManagement.service.AmbulanceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,8 +19,15 @@ import java.util.List;
 @RequestMapping("/ambulances")
 public class AmbulanceController {
 
+
     @Autowired
     private AmbulanceService ambulanceService;
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) throws GlobalException {
+        long id = ambulanceService.login(loginRequest);
+        return ResponseEntity.ok().body(new LoginResponse(id));
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<AmbulanceEntity> getAmbulanceById(@PathVariable long id) {
