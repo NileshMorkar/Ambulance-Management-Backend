@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Builder
 public class AmbulanceLocationRequest {
-    private Long ambulanceId;
+    private String ambulanceId;
     private String latitude;
     private String longitude;
 }

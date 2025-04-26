@@ -61,4 +61,8 @@ public class AmbulanceService {
     public List<AmbulanceLocationEntity> getAllAmbulances() {
         return ambulanceLocationRepository.findAll();
     }
+
+    public AmbulanceEntity getAmbulanceById(long id) {
+        return ambulanceRepository.findById(id).orElse(null);
+    }
 }

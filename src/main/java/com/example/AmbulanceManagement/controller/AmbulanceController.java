@@ -19,6 +19,11 @@ public class AmbulanceController {
     @Autowired
     private AmbulanceService ambulanceService;
 
+    @GetMapping("/{id}")
+    public ResponseEntity<AmbulanceEntity> getAmbulanceById(@PathVariable long id) {
+        return ResponseEntity.ok(ambulanceService.getAmbulanceById(id));
+    }
+
     @PostMapping
     public ResponseEntity<AmbulanceEntity> createAmbulance(@RequestBody AmbulanceEntity ambulance) {
         AmbulanceEntity savedAmbulance = ambulanceService.save(ambulance);
@@ -27,7 +32,7 @@ public class AmbulanceController {
 
     @PostMapping("/location/update")
     public ResponseEntity<AmbulanceLocationEntity> updateLocation(@RequestBody AmbulanceLocationRequest ambulanceLocation) {
-        return ResponseEntity.status(HttpStatus.OK).body(ambulanceService.updateLocation(ambulanceLocation.getAmbulanceId(), ambulanceLocation.getLatitude(), ambulanceLocation.getLongitude()));
+        return ResponseEntity.status(HttpStatus.OK).body(ambulanceService.updateLocation(Long.valueOf(ambulanceLocation.getAmbulanceId()), ambulanceLocation.getLatitude(), ambulanceLocation.getLongitude()));
     }
 
     @GetMapping("/nearby")
