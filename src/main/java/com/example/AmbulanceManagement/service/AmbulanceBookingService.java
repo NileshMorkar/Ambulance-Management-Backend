@@ -7,7 +7,8 @@ import com.example.AmbulanceManagement.repository.AmbulanceBookingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,7 +26,7 @@ public class AmbulanceBookingService {
                 .builder()
                 .ambulanceId(Long.parseLong(ambulanceBookingRequest.getAmbulanceId()))
                 .userId(ambulanceBookingRequest.getUserId())
-                .bookingDate(LocalDateTime.now())
+                .bookingDate(ZonedDateTime.now(ZoneId.of("Asia/Kolkata")))
                 .userPhoneNum(ambulanceBookingRequest.getUserPhoneNum())
                 .userEmail(ambulanceBookingRequest.getUserEmail())
                 .userName(ambulanceBookingRequest.getUserName())
@@ -35,8 +36,8 @@ public class AmbulanceBookingService {
 
     public List<AmbulanceBookingResponse> getAmbulancesBookedByUser(String userId) {
         List<AmbulanceBookingEntity> ambulanceBookingEntityList = ambulanceBookingRepository.findAllByUserId(userId);
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm a");
         return ambulanceBookingEntityList.stream().map(ambulanceBooking -> {
-            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MM-dd-yyyy hh:mm a");
 
             return AmbulanceBookingResponse
                     .builder()

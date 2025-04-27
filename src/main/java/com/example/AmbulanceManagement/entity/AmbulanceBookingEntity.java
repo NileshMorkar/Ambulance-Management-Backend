@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 
 @Entity
@@ -25,7 +25,7 @@ public class AmbulanceBookingEntity {
     private String userId;
 
     @Column(name = "booking_date")
-    private LocalDateTime bookingDate;
+    private ZonedDateTime bookingDate;
 
     private String userName;
     private String userEmail;
