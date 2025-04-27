@@ -26,7 +26,7 @@ public class AmbulanceBookingService {
                 .builder()
                 .ambulanceId(Long.parseLong(ambulanceBookingRequest.getAmbulanceId()))
                 .userId(ambulanceBookingRequest.getUserId())
-                .bookingDate(ZonedDateTime.now(ZoneId.of("Asia/Kolkata")))
+                .bookingDate(ZonedDateTime.now(ZoneId.of("UTC"))) // <-- save in UTC
                 .userPhoneNum(ambulanceBookingRequest.getUserPhoneNum())
                 .userEmail(ambulanceBookingRequest.getUserEmail())
                 .userName(ambulanceBookingRequest.getUserName())
@@ -36,8 +36,10 @@ public class AmbulanceBookingService {
 
     public List<AmbulanceBookingResponse> getAmbulancesBookedByUser(String userId) {
         List<AmbulanceBookingEntity> ambulanceBookingEntityList = ambulanceBookingRepository.findAllByUserId(userId);
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm a");
+        DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm a");
+
         return ambulanceBookingEntityList.stream().map(ambulanceBooking -> {
+            ZonedDateTime indiaTime = ambulanceBooking.getBookingDate().withZoneSameInstant(ZoneId.of("Asia/Kolkata"));
 
             return AmbulanceBookingResponse
                     .builder()
@@ -45,17 +47,19 @@ public class AmbulanceBookingService {
                     .userPhoneNum(ambulanceBooking.getUserPhoneNum())
                     .userEmail(ambulanceBooking.getUserEmail())
                     .userName(ambulanceBooking.getUserName())
-                    .bookingDate(dateTimeFormatter.format(ambulanceBooking.getBookingDate()))
+                    .bookingDate(FORMATTER.format(indiaTime))
                     .ambulance(ambulanceService.getAmbulanceById(ambulanceBooking.getAmbulanceId()))
                     .build();
         }).collect(Collectors.toList());
     }
+
 
     public List<AmbulanceBookingResponse> getAmbulancesBookingHistoryOfDriver(String ambulanceId) {
         List<AmbulanceBookingEntity> ambulanceBookingEntityList = ambulanceBookingRepository.findAllByAmbulanceId(Long.parseLong(ambulanceId));
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MM-dd-yyyy hh:mm a"); // You can keep this format
 
         return ambulanceBookingEntityList.stream().map(ambulanceBooking -> {
-            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MM-dd-yyyy hh:mm a");
+            ZonedDateTime indiaTime = ambulanceBooking.getBookingDate().withZoneSameInstant(ZoneId.of("Asia/Kolkata")); // <-- Add this line
 
             return AmbulanceBookingResponse
                     .builder()
@@ -63,9 +67,10 @@ public class AmbulanceBookingService {
                     .userPhoneNum(ambulanceBooking.getUserPhoneNum())
                     .userEmail(ambulanceBooking.getUserEmail())
                     .userName(ambulanceBooking.getUserName())
-                    .bookingDate(dateTimeFormatter.format(ambulanceBooking.getBookingDate()))
+                    .bookingDate(dateTimeFormatter.format(indiaTime)) // <-- format using India time
                     .ambulance(ambulanceService.getAmbulanceById(ambulanceBooking.getAmbulanceId()))
                     .build();
         }).collect(Collectors.toList());
     }
+
 }
