@@ -19,11 +19,12 @@ import java.util.List;
 @Service
 public class AmbulanceService {
     @Autowired
-    AmbulanceRepository ambulanceRepository;
+    private AmbulanceRepository ambulanceRepository;
     @Autowired
     private AmbulanceLocationRepository ambulanceLocationRepository;
 
     public AmbulanceEntity save(AmbulanceEntity ambulance) {
+        ambulance.setStatus(1);
         return ambulanceRepository.save(ambulance);
     }
 
@@ -32,18 +33,27 @@ public class AmbulanceService {
         List<AmbulanceLocationResponse> ambulanceLocationResponseList = new ArrayList<>();
         int miniDistance = Integer.parseInt(distance);
         for (AmbulanceLocationEntity ambulanceLocation : ambulanceLocations) {
-            double calculatedistance = GeoUtils.calculateDistance(latitude, longitude, ambulanceLocation.getLatitude(), ambulanceLocation.getLongitude());
-            if (calculatedistance < miniDistance) {
+            double calculatedDistance = GeoUtils.calculateDistance(latitude, longitude, ambulanceLocation.getLatitude(), ambulanceLocation.getLongitude());
+            if (calculatedDistance < miniDistance) {
                 ambulanceLocationResponseList.add(AmbulanceLocationResponse
                         .builder()
                         .ambulance(ambulanceLocation.getAmbulance())
+                        .status(ambulanceLocation.getAmbulance().getStatus())
                         .location(new Location(ambulanceLocation.getLatitude(), ambulanceLocation.getLongitude()))
-                        .distance(Double.toString(calculatedistance))
+                        .distance(Double.toString(calculatedDistance))
                         .build());
             }
         }
 
         return ambulanceLocationResponseList;
+    }
+
+    public void updateStatus(long ambulanceId, int status) {
+
+        AmbulanceEntity ambulance = ambulanceRepository.findById(ambulanceId).orElse(null);
+        assert ambulance != null;
+        ambulance.setStatus(status);
+        ambulanceRepository.save(ambulance);
     }
 
 

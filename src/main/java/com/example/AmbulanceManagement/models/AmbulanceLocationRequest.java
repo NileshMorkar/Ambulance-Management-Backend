@@ -13,4 +13,5 @@ public class AmbulanceLocationRequest {
     private String ambulanceId;
     private String latitude;
     private String longitude;
+    private int status;
 }

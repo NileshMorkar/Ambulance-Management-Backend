@@ -21,12 +21,15 @@ public class AmbulanceBookingService {
     @Autowired
     private AmbulanceBookingRepository ambulanceBookingRepository;
 
+
     public void bookAmbulance(AmbulanceBookingRequest ambulanceBookingRequest) {
+
+        ambulanceService.updateStatus(Long.parseLong(ambulanceBookingRequest.getAmbulanceId()), 0);
         AmbulanceBookingEntity ambulanceBookingEntity = AmbulanceBookingEntity
                 .builder()
                 .ambulanceId(Long.parseLong(ambulanceBookingRequest.getAmbulanceId()))
                 .userId(ambulanceBookingRequest.getUserId())
-                .bookingDate(ZonedDateTime.now(ZoneId.of("UTC"))) // <-- save in UTC
+                .bookingDate(ZonedDateTime.now(ZoneId.of("UTC")))
                 .userPhoneNum(ambulanceBookingRequest.getUserPhoneNum())
                 .userEmail(ambulanceBookingRequest.getUserEmail())
                 .userName(ambulanceBookingRequest.getUserName())
@@ -67,7 +70,7 @@ public class AmbulanceBookingService {
                     .userPhoneNum(ambulanceBooking.getUserPhoneNum())
                     .userEmail(ambulanceBooking.getUserEmail())
                     .userName(ambulanceBooking.getUserName())
-                    .bookingDate(dateTimeFormatter.format(indiaTime)) // <-- format using India time
+                    .bookingDate(dateTimeFormatter.format(indiaTime))
                     .ambulance(ambulanceService.getAmbulanceById(ambulanceBooking.getAmbulanceId()))
                     .build();
         }).collect(Collectors.toList());

@@ -15,5 +15,6 @@ public class AmbulanceLocationResponse {
     private AmbulanceEntity ambulance;
     private Location location;
     private String distance;
+    private int status;
 
 }

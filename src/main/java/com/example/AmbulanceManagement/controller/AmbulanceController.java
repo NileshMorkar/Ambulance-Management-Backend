@@ -54,4 +54,10 @@ public class AmbulanceController {
     public List<AmbulanceLocationEntity> getAllAmbulances() {
         return ambulanceService.getAllAmbulances();
     }
+
+    @GetMapping("/status/update/{id}")
+    public ResponseEntity<Void> updateStatus(@PathVariable("id") long ambulanceId, @RequestParam int status) {
+        ambulanceService.updateStatus(ambulanceId, status);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 }
