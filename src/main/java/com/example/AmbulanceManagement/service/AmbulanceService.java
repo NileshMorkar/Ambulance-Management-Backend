@@ -73,7 +73,7 @@ public class AmbulanceService {
     }
 
     public List<AmbulanceLocationEntity> getAllAmbulances() {
-        return ambulanceLocationRepository.findAll().stream().filter(ambulanceLocationEntity -> ambulanceLocationEntity.getAmbulance().getStatus() == 0).collect(Collectors.toList());
+        return ambulanceLocationRepository.findAll().stream().filter(ambulanceLocationEntity -> ambulanceLocationEntity.getAmbulance().getStatus() == 1).collect(Collectors.toList());
     }
 
     public AmbulanceEntity getAmbulanceById(long id) {
