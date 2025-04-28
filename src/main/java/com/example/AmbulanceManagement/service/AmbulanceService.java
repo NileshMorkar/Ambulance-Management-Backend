@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AmbulanceService {
@@ -72,7 +73,7 @@ public class AmbulanceService {
     }
 
     public List<AmbulanceLocationEntity> getAllAmbulances() {
-        return ambulanceLocationRepository.findAll();
+        return ambulanceLocationRepository.findAll().stream().filter(ambulanceLocationEntity -> ambulanceLocationEntity.getAmbulance().getStatus() == 0).collect(Collectors.toList());
     }
 
     public AmbulanceEntity getAmbulanceById(long id) {
