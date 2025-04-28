@@ -34,7 +34,7 @@ public class AmbulanceService {
         int miniDistance = Integer.parseInt(distance);
         for (AmbulanceLocationEntity ambulanceLocation : ambulanceLocations) {
             double calculatedDistance = GeoUtils.calculateDistance(latitude, longitude, ambulanceLocation.getLatitude(), ambulanceLocation.getLongitude());
-            if (calculatedDistance < miniDistance) {
+            if (calculatedDistance < miniDistance && ambulanceLocation.getAmbulance().getStatus() == 0) {
                 ambulanceLocationResponseList.add(AmbulanceLocationResponse
                         .builder()
                         .ambulance(ambulanceLocation.getAmbulance())
